@@ -28,39 +28,30 @@ public class GhostMovement : MonoBehaviour
     {
        
     }
-    //check for change in direction trigger
+
     private void CheckForTrigger()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 0.1f, layerMask);
-        Debug.DrawRay(transform.position, direction * 0.1f, Color.red);
-        if (hit.collider != null)
-        {
-            return false;
-        }
-        return true;
+
     }
-    //choose which new direction to get
-    private void ChooseDirection()
+
+    private Vector2 ChooseDirection()
     {
         List<Vector2> ValidDirections = new List<Vector2>();
-        //check for the directions that contain a wall
-        foreach (Vector2 dir in possibleDirections)
+
+        foreach (Vector2 dir in directions)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 0.1f, wallLayerMask);
+            int layerMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("GhostTriggers")) | (1 << LayerMask.NameToLayer("Ghosts")));
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 0.1f, layerMask);
             if (hit.collider == null)
             {
-                validDirections.Add(dir);
+                ValidDirections.Add(dir);
             }
         }
-        // Use Random.Range to pick a random index from the list
-        if (validDirections.Count > 0)
-        {
-            int randomIndex = Random.Range(0, validDirections.Count);
-            Vector2 randomDirection = validDirections[randomIndex];
-            return randomDirection;
 
-            Debug.Log("Chosen direction: " + randomDirection);
-        }
+        int randomIndex = Random.Range(0, ValidDirections.Count);
+        Vector2 randomDirection = ValidDirections[randomIndex];
+        return randomDirection;
 
+        Debug.Log("Chosen direction: " + randomDirection);
     }
 }
