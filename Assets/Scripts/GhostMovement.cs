@@ -8,6 +8,9 @@ public class GhostMovement : MonoBehaviour
     private float speed = 2.5f;
     private float oscillate = 0.7f;
     private Vector2 startPosition;
+    private bool go = false;
+    private float timer = 0f;
+    public Vector2 escapePosition;
 
     Vector2[] directions = new Vector2[]
     {
@@ -17,20 +20,54 @@ public class GhostMovement : MonoBehaviour
             Vector2.down
     };
 
-    void start()
+    void Start()
     {
+        startPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
-        Escape();
+        escapePosition = new Vector2(0f, 2.19f);
     }
 
-    void update()
+    void Update()
     {
+        if(!go)
+        {
+            Bounce();
 
+            timer += Time.deltaTime;
+
+            if (timer >= 3f)
+            {
+                go = true;
+                Escape();
+            }
+        }
     }
 
     private void Escape()
     {
+        StartCoroutine(MoveToEscapePosition());
+    }
 
+    private IEnumerator MoveToEscapePosition()
+    {
+        Vector2 startPos = transform.position;
+        float duration = 2f;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, escapePosition, speed * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = escapePosition;
+    }
+
+    private void Bounce()
+    {
+        float y = Mathf.PingPong(Time.time * speed, oscillate);
+        transform.position = startPosition + new Vector2(0, y);
     }
 
     private Vector2 ChooseDirection()
