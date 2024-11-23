@@ -5,6 +5,9 @@ using UnityEngine;
 public class GhostMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private float speed = 2.5f;
+    private float oscillate = 0.7f;
+    private Vector2 startPosition;
 
     Vector2[] directions = new Vector2[]
     {
@@ -17,6 +20,7 @@ public class GhostMovement : MonoBehaviour
     void start()
     {
         rb = GetComponent<Rigidbody2D>();
+        Escape();
     }
 
     void update()
@@ -24,12 +28,7 @@ public class GhostMovement : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-       
-    }
-
-    private void CheckForTrigger()
+    private void Escape()
     {
 
     }
