@@ -5,7 +5,7 @@ using UnityEngine;
 public class GhostMovementRed : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private float speed = 2.5f;
+    private float speed = 3f;
     private float oscillate = 0.7f;
     private Vector2 startPosition;
     private bool escape = false;
@@ -50,7 +50,6 @@ public class GhostMovementRed : MonoBehaviour
         if(go)
         {
             rb.velocity = movementDirection * speed;
-            CheckForTrigger();
         }
     }
 
@@ -82,23 +81,6 @@ public class GhostMovementRed : MonoBehaviour
         float y = Mathf.PingPong(Time.time * speed, oscillate);
         transform.position = startPosition + new Vector2(0, y);
     }
-    //check if a ghost trigger is detected
-    private void CheckForTrigger()
-    {
-        direction = rb.velocity.normalized; // Direction based on current velocity
-        int layerMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ghosts")) | (1 << LayerMask.NameToLayer("Points")));
-
-        // Cast a thicker ray by offsetting the origin slightly
-        float raycastDistance = 0.1f; // Adjust the raycast length as needed
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, raycastDistance, layerMask);
-        if (hit.collider != null)
-        {
-            movementDirection = ChooseDirection();
-            Debug.Log("choose direction is run");
-        }
-    }
-
-
 
     private Vector2 ChooseDirection()
     {
@@ -109,7 +91,7 @@ public class GhostMovementRed : MonoBehaviour
 
         foreach (Vector2 dir in directions)
         {
-            int layerMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ghosts")) | (1 << LayerMask.NameToLayer("Points")));
+            int layerMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ghosts")) | (1 << LayerMask.NameToLayer("Points")) | (1 << LayerMask.NameToLayer("GhostTriggers")));
 
             // Raycast from the center of the collider (Ghost Trigger)
             RaycastHit2D hit = Physics2D.Raycast(triggerCenter, dir, 1f, layerMask); // Adjust the raycast distance if necessary
@@ -127,7 +109,6 @@ public class GhostMovementRed : MonoBehaviour
         if (ValidDirections.Count == 0)
         {
             Debug.LogWarning("No valid directions found! Defaulting to a random direction.");
-            return directions[Random.Range(0, directions.Length)]; // Fallback if no valid directions
         }
 
         // Choose a random valid direction
@@ -144,7 +125,6 @@ public class GhostMovementRed : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name);
         if (collision.gameObject.name == "TeleportRight")
         {
             transform.position = new Vector3(9.323f, -0.01662342f, 0.04814792f);
@@ -155,6 +135,10 @@ public class GhostMovementRed : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        movementDirection = ChooseDirection();
+    }
 }
 
 // edit: to do, add ghost trigger script that contains all possible directions of travel from that trigger then use these directions when tiggered
