@@ -7,22 +7,21 @@ using TMPro;
 
 public class PacmanMovement : MonoBehaviour
 {
-    public float speed = 2.5f; // Movement speed
-    private Vector2 direction = Vector2.zero; // Current movement direction
-    private Vector2 nextDirection = Vector2.zero; // Queued movement direction
+    public float speed = 2.5f;
+    private Vector2 direction = Vector2.zero;
+    private Vector2 nextDirection = Vector2.zero;
     private string teleportLayer = "Teleport";
     private Rigidbody2D rb;
     private int targetLayer;
-    public Tilemap TilemapPoints; // Reference to the Tilemap containing points
-    public TileBase pointTile;   // Reference to the specific point tile (e.g., dot/pellet tile)
-    public int scorePerPoint = 50; // Points to add per tile collected
+    public Tilemap TilemapPoints;
+    public TileBase pointTile;
+    public int scorePerPoint = 50;
     public int Score = 0;
     public TextMeshProUGUI scoreBoard;
     private Animator anim;
 
     void Start()
     {
-        // Initialize Rigidbody2D
         rb = GetComponent<Rigidbody2D>();
         targetLayer = LayerMask.NameToLayer(teleportLayer);
         anim = GetComponent<Animator>();
@@ -31,10 +30,8 @@ public class PacmanMovement : MonoBehaviour
 
     void Update()
     {
-        // Capture Input
         CaptureInput();
 
-        // Try to move in the desired direction
         Move();
 
         PointCollection();
@@ -42,7 +39,6 @@ public class PacmanMovement : MonoBehaviour
 
     private void CaptureInput()
     {
-        // Check player input and set next direction
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             nextDirection = Vector2.up;
@@ -63,7 +59,6 @@ public class PacmanMovement : MonoBehaviour
 
     private void Move()
     {
-        // Change direction if there's no wall in the way
         if (CanMove(nextDirection))
         {
             direction = nextDirection;
@@ -100,9 +95,7 @@ public class PacmanMovement : MonoBehaviour
     private bool CanMove(Vector2 direction)
     {
         int layerMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("GhostTriggers")));
-        // Raycast in the intended direction to see if we hit a wall
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 0.1f, layerMask);
-        Debug.DrawRay(transform.position, direction * 0.1f, Color.red);
         if (hit.collider != null)
         {
             return false;
@@ -125,7 +118,6 @@ public class PacmanMovement : MonoBehaviour
 
     private bool CollectPoint(Vector2 direction)
     {
-        Debug.DrawRay(transform.position, direction * 0.5f, Color.blue);
         int layerMask = ~(1 << LayerMask.NameToLayer("Player"));
         RaycastHit2D point = Physics2D.Raycast(transform.position, direction, 0.5f, layerMask);
         if (point.collider != null)
@@ -143,17 +135,13 @@ public class PacmanMovement : MonoBehaviour
             Vector3 worldPosition = transform.position;
             Vector3Int cellPosition = TilemapPoints.WorldToCell(worldPosition);
 
-            // Check if there's a point tile at that cell position
             TileBase tileAtPosition = TilemapPoints.GetTile(cellPosition);
 
-            // If the tile is a point tile, remove it
             if (tileAtPosition == pointTile)
             {
-                // Remove the tile from the Tilemap (collect the point)
+
                 TilemapPoints.SetTile(cellPosition, null);
 
-                // Optionally, add score logic here
-                // Example: GameManager.Instance.AddScore(10); // If you have a GameManager to manage the score
                 Score = Score + scorePerPoint;
                 IncreaseScore();
             }
@@ -162,7 +150,6 @@ public class PacmanMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name);
         if (collision.gameObject.name == "TeleportRight")
         {
             transform.position = new Vector3(9.323f, -0.01662342f, 0.04814792f);

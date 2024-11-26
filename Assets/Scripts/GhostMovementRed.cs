@@ -82,40 +82,28 @@ public class GhostMovementRed : MonoBehaviour
         transform.position = startPosition + new Vector2(0, y);
     }
 
-    private Vector2 ChooseDirection()
+    private Vector2 ChooseDirection(Vector2 movementDirection)
     {
         List<Vector2> ValidDirections = new List<Vector2>();
 
-        // Get the position of the center of the collider (Ghost Trigger)
         Vector2 triggerCenter = GetComponent<Collider2D>().bounds.center;
 
         foreach (Vector2 dir in directions)
         {
+            if (dir == -movementDirection) continue;
+
             int layerMask = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ghosts")) | (1 << LayerMask.NameToLayer("Points")) | (1 << LayerMask.NameToLayer("GhostTriggers")));
 
-            // Raycast from the center of the collider (Ghost Trigger)
-            RaycastHit2D hit = Physics2D.Raycast(triggerCenter, dir, 1f, layerMask); // Adjust the raycast distance if necessary
+            RaycastHit2D hit = Physics2D.Raycast(triggerCenter, dir, 1f, layerMask);
 
-            // Debugging: Draw the ray from the center of the collider for visualization
-            Debug.DrawRay(triggerCenter, dir * 1f, Color.green);  // Main ray
-
-            // Check for a valid direction (no wall hit)
-            if (hit.collider == null) // If no collider is hit (no wall)
+            if (hit.collider == null)
             {
                 ValidDirections.Add(dir);
             }
         }
 
-        if (ValidDirections.Count == 0)
-        {
-            Debug.LogWarning("No valid directions found! Defaulting to a random direction.");
-        }
-
-        // Choose a random valid direction
         int randomIndex = Random.Range(0, ValidDirections.Count);
         Vector2 randomDirection = ValidDirections[randomIndex];
-
-        Debug.Log("Chosen direction: " + randomDirection); // Log the chosen direction
 
         return randomDirection;
     }
@@ -137,8 +125,13 @@ public class GhostMovementRed : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        movementDirection = ChooseDirection();
+        if (other.CompareTag("Teleport"))
+        {
+            return;
+        }
+        else
+        {
+            movementDirection = ChooseDirection(movementDirection);
+        }
     }
 }
-
-// edit: to do, add ghost trigger script that contains all possible directions of travel from that trigger then use these directions when tiggered
