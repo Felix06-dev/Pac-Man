@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GhostMovementRed : MonoBehaviour
+public class GhostMovementOrange : MonoBehaviour
 {
     private Rigidbody2D rb;
     private float speed = 2.6f;
+    private float oscillate = 0.7f;
     private Vector2 startPosition;
+    private bool escape = false;
+    private float timer = 0f;
+    public Vector2 escapePosition;
     private Vector2 movementDirection;
-    private bool go = true;
+    private bool go = false;
     private Vector2 direction;
 
 
@@ -25,14 +29,57 @@ public class GhostMovementRed : MonoBehaviour
         movementDirection = Random.Range(0f, 1f) > 0.5f ? Vector2.right : Vector2.left;
         startPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
+        escapePosition = new Vector2(0f, 2.19f);
     }
 
     void Update()
     {
-        if(go)
+        if (!escape)
+        {
+            Bounce();
+
+            timer += Time.deltaTime;
+
+            if (timer >= 8f)
+            {
+                escape = true;
+                Escape();
+            }
+        }
+
+        if (go)
         {
             rb.velocity = movementDirection * speed;
         }
+    }
+
+    private void Escape()
+    {
+        StartCoroutine(MoveToEscapePosition());
+    }
+
+    private IEnumerator MoveToEscapePosition()
+    {
+        Vector2 startPos = transform.position;
+        float duration = 0.6f;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, escapePosition, speed * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        go = true;
+
+        transform.position = escapePosition;
+    }
+
+    private void Bounce()
+    {
+        float y = Mathf.PingPong(Time.time * speed, oscillate);
+        transform.position = startPosition + new Vector2(0, y);
     }
 
     private Vector2 ChooseDirection(Vector2 movementDirection)
