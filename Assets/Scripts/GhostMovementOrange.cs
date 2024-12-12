@@ -11,6 +11,8 @@ public class GhostMovementOrange : MonoBehaviour
     private bool escape = false;
     private float timer = 0f;
     public Vector2 escapePosition;
+    public Vector2 middlePosition;
+    public Vector2 centrePosition;
     private Vector2 movementDirection;
     private bool go = false;
     private Vector2 direction;
@@ -30,6 +32,8 @@ public class GhostMovementOrange : MonoBehaviour
         startPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
         escapePosition = new Vector2(0f, 2.19f);
+        middlePosition = new Vector2(1f, 0.35f);
+        centrePosition = new Vector2(0f, 0.35f);
     }
 
     void Update()
@@ -60,8 +64,56 @@ public class GhostMovementOrange : MonoBehaviour
 
     private IEnumerator MoveToEscapePosition()
     {
+        // Move to the middle position
+        yield return StartCoroutine(MoveToMiddle());
+
+        // Move to the center position
+        yield return StartCoroutine(MoveToCentre());
+
+        // Move to the escape position
+        yield return StartCoroutine(MoveToOut());
+    }
+
+    private IEnumerator MoveToMiddle()
+    {
         Vector2 startPos = transform.position;
-        float duration = 0.6f;
+        float duration = 0.06f;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, middlePosition, speed * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        go = false;
+
+        transform.position = middlePosition;
+    }
+
+    private IEnumerator MoveToCentre()
+    {
+        Vector2 startPos = transform.position;
+        float duration = 0.36f;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, centrePosition, speed * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        go = false;
+
+        transform.position = centrePosition;
+    }
+
+    private IEnumerator MoveToOut()
+    {
+        Vector2 startPos = transform.position;
+        float duration = 0.67f;
         float timeElapsed = 0f;
 
         while (timeElapsed < duration)

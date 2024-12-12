@@ -78,7 +78,7 @@ public class GhostMovementBlue : MonoBehaviour
     private IEnumerator MoveToMiddle()
     {
         Vector2 startPos = transform.position;
-        float duration = 0.6f;
+        float duration = 0.06f;
         float timeElapsed = 0f;
 
         while (timeElapsed < duration)
@@ -96,7 +96,7 @@ public class GhostMovementBlue : MonoBehaviour
     private IEnumerator MoveToCentre()
     {
         Vector2 startPos = transform.position;
-        float duration = 0.6f;
+        float duration = 0.36f;
         float timeElapsed = 0f;
 
         while (timeElapsed < duration)
@@ -114,7 +114,7 @@ public class GhostMovementBlue : MonoBehaviour
     private IEnumerator MoveToOut()
     {
         Vector2 startPos = transform.position;
-        float duration = 0.6f;
+        float duration = 0.67f;
         float timeElapsed = 0f;
 
         while (timeElapsed < duration)
