@@ -19,6 +19,7 @@ public class PacmanMovement : MonoBehaviour
     public int Score = 0;
     public TextMeshProUGUI scoreBoard;
     private Animator anim;
+    public bool die = false;
 
     void Start()
     {
@@ -158,6 +159,17 @@ public class PacmanMovement : MonoBehaviour
         {
             transform.position = new Vector3(-9.323f, -0.01662342f, 0.04814792f);
         }
+
+        if (collision.gameObject.CompareTag("Ghosts"))
+        {
+            die = true;
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     private void IncreaseScore()
