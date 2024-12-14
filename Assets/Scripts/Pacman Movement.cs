@@ -169,7 +169,7 @@ public class PacmanMovement : MonoBehaviour
 
     private void Die()
     {
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        GameOverGhostRun.GameOver();
     }
 
     private void IncreaseScore()
