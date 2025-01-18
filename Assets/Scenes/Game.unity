@@ -4500,9 +4500,10 @@ GameObject:
   - component: {fileID: 818371162}
   - component: {fileID: 818371163}
   - component: {fileID: 818371164}
+  - component: {fileID: 818371165}
   m_Layer: 6
   m_Name: Pacman
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4619,6 +4620,7 @@ MonoBehaviour:
   scorePerPoint: 50
   Score: 0
   scoreBoard: {fileID: 1232508927}
+  die: 0
 --- !u!95 &818371163
 Animator:
   serializedVersion: 5
@@ -4685,6 +4687,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.2, y: 3.2}
   m_EdgeRadius: 0
+--- !u!114 &818371165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818371158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b397ee65b8d4a4086b18fa1f1dac02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tag1: Player
+  tag2: Ghosts
 --- !u!1 &862205658
 GameObject:
   m_ObjectHideFlags: 0
@@ -4913,7 +4929,7 @@ Transform:
   m_GameObject: {fileID: 1091548978}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.031, y: 0.376, z: 0}
+  m_LocalPosition: {x: 0.031, y: 0.376, z: -3.03}
   m_LocalScale: {x: 0.72, y: 0.72, z: 0.72}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5917,26 +5933,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -1, y: 2, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 0, y: 2, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 1, y: 2, z: 0}
     second:
       serializedVersion: 2
@@ -6409,13 +6405,13 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 143
+  - m_RefCount: 141
     m_Data: {fileID: 11400000, guid: f97ea116288f6e74eac8b62a5f33517f, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 143
+  - m_RefCount: 141
     m_Data: {fileID: 21300000, guid: c53f9c204e24da947a7e723fc7626a25, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 143
+  - m_RefCount: 141
     m_Data:
       e00: 1
       e01: 0
@@ -6434,7 +6430,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 143
+  - m_RefCount: 141
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1

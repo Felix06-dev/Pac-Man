@@ -151,6 +151,10 @@ public class PacmanMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.CompareTag("Ghosts"))
+        {
+            transform.position = new Vector3(0f, 0f, 0f);
+        }
         if (collision.gameObject.name == "TeleportRight")
         {
             transform.position = new Vector3(9.323f, -0.01662342f, 0.04814792f);
@@ -159,17 +163,6 @@ public class PacmanMovement : MonoBehaviour
         {
             transform.position = new Vector3(-9.323f, -0.01662342f, 0.04814792f);
         }
-
-        if (collision.gameObject.CompareTag("Ghosts"))
-        {
-            die = true;
-            Die();
-        }
-    }
-
-    private void Die()
-    {
-        GameOverGhostRun.GameOver();
     }
 
     private void IncreaseScore()
