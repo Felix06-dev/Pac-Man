@@ -150,11 +150,13 @@ public class PacmanMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private IEnumerator OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ghosts"))
         {
-            transform.position = new Vector3(0f, 0f, 0f);
+            Time.timeScale = 0f;
+            yield return new WaitForSecondsRealtime(1f);
+            SceneManager.LoadScene("PlayMenu");
         }
         if (collision.gameObject.name == "TeleportRight")
         {
