@@ -8,6 +8,7 @@ TagManager:
   - Points
   - Ghosts
   - Teleport
+  - Balls
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Ghosts
   - GhostTriggers
   - GhostWalls
-  - 
+  - Balls
   - 
   - 
   - 
